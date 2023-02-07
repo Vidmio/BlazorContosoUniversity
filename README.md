@@ -75,3 +75,20 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 PMC:
 add-migration initial
 update-database
+
+In shared add DBContextPage.razor
+
+@using BlazorContosoUniversity.Data
+@using Microsoft.EntityFrameworkCore
+@inject IDbContextFactory<ApplicationDbContext> DbFactory
+@code {
+    protected ApplicationDbContext dbContext;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (dbContext == null)
+        {
+            dbContext = await DbFactory.CreateDbContextAsync();
+        }
+    }
+}
