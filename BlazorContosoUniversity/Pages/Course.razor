@@ -1,0 +1,59 @@
+﻿@page "/Course"
+@using BlazorContosoUniversity.Data
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager NavigationManager
+@inherits BlazorContosoUniversity.Shared.DBContextPage
+<h3>Course</h3>
+<div class="col-md-6">
+    <a href='/courseadd' class="btn btn-primary" role="button">
+        Add new
+    </a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Title</th>
+            <th>Credit</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var d in data)
+        {
+            <tr>
+                <td>@d.CourseID</td>
+                <td>@d.Title</td>
+                <td>@d.Credits</td>
+
+                <td>
+                    <a href='/CourseEdit/@d.CourseID' class="btn btn-outline-dark" role="button">
+                        Edit
+                    </a>
+                    <button class="btn btn-outline-danger" @onclick="(async () => await Delete(d))">Delete</button>
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    IEnumerable<BlazorContosoUniversity.Data.Course> data;
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        data = dbContext.Courses.AsNoTracking();
+    }
+
+    protected async Task Delete(Data.Course d)
+    {
+        //dbContext.Remove<Data.Course>(await dbContext.Courses.FirstOrDefaultAsync(x => x.CourseID == Id));
+        //dbContext.Remove<Data.Course>(data.FirstOrDefault(x => x.CourseID == Id));
+        //dbContext.Remove<Data.Course>(d);
+        dbContext.Remove(d);
+        dbContext.SaveChanges();
+    }
+
+}

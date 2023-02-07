@@ -1,0 +1,58 @@
+﻿@page "/CourseAdd"
+@using BlazorContosoUniversity.Data
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager NavigationManager
+@inherits BlazorContosoUniversity.Shared.DBContextPage
+<h3>Add</h3>
+<EditForm Model="@data" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Id</label>
+        <InputNumber class="form-control" @bind-Value="data.CourseID" />
+        <ValidationMessage For="() => data.CourseID" />
+    </div>
+    <div class="form-group">
+        <label>Title</label>
+        <InputText class="form-control" @bind-Value="data.Title" />
+        <ValidationMessage For="() => data.Title" />
+    </div>
+    <div class="form-group">
+        <label>Credits</label>
+        <InputNumber class="form-control" @bind-Value="data.Credits" />
+        <ValidationMessage For="() => data.Credits" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    Data.Course data = new Data.Course();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+    }
+    protected async Task Submit()
+    {
+        try
+        {
+            await dbContext.Courses.AddAsync(data);
+            await dbContext.SaveChangesAsync();
+            NavigationManager.NavigateTo("Course");
+        }
+        catch
+        {
+            dbContext.Entry(data).State = EntityState.Detached;
+            throw;
+        }
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Course");
+
+    }
+}
