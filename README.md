@@ -21,15 +21,15 @@ public class ApplicationDbContext : DbContext
     	public DbSet<Course> Courses { get; set; }  
 }  
 
-In your appsettings.json file, add in the following
-"ConnectionStrings": {
-    "DataConnectionString": "Data Source=(localdb)\\mssqllocaldb;Database=BlazorContosoUniversity;;Trusted_Connection=True;MultipleActiveResultSets=true"
+In your appsettings.json file, add in the following  
+"ConnectionStrings": {  
+    "DataConnectionString": "Data Source=(localdb)\\mssqllocaldb;Database=BlazorContosoUniversity;;Trusted_Connection=True;MultipleActiveResultSets=true"  
   }
 
-In the Program.cs bebore var app = builder.Build(); add:  
-builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
+In the Program.cs before var app = builder.Build(); add:  
+builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>  
    options.UseSqlServer(builder.Configuration.GetConnectionString("DataConnectionString"), sqlServerOptions => sqlServerOptions.CommandTimeout(120)),
-   ServiceLifetime.Transient
+   ServiceLifetime.Transient  
 );  
 			
 
