@@ -1,11 +1,11 @@
-﻿@page "/Course"
+﻿@page "/Enrollments"
 @using BlazorContosoUniversity.Data
 @using Microsoft.EntityFrameworkCore
 @inject NavigationManager NavigationManager
 @inherits BlazorContosoUniversity.Shared.DBContextPage
-<h3>Courses</h3>
+<h3>Enrollments</h3>
 <div class="col-md-6">
-    <a href='/courseadd' class="btn btn-primary" role="button">
+    <a href='/EnrollmentAddEdit/0' class="btn btn-primary" role="button">
         Add new
     </a>
 </div>
@@ -14,8 +14,11 @@
     <thead>
         <tr>
             <th>Id</th>
-            <th>Title</th>
-            <th>Credit</th>
+            <th>Course ID</th>
+            <th>Course Name</th>
+            <th>Student ID</th>
+            <th>Student Name</th>
+            <td>Grade</td>
             <th>Action</th>
         </tr>
     </thead>
@@ -23,12 +26,15 @@
         @foreach (var d in data)
         {
             <tr>
+                <td>@d.EnrollmentID</td>
                 <td>@d.CourseID</td>
-                <td>@d.Title</td>
-                <td>@d.Credits</td>
+                <td>@d.Course.Title</td>
+                <td>@d.StudentID</td>
+                <td>@d.Student.LastName @d.Student.FirstMidName</td>
+                <td>@d.Grade</td>
 
                 <td>
-                    <a href='/CourseEdit/@d.CourseID' class="btn btn-outline-dark" role="button">
+                    <a href='/EnrollmentAddEdit/@d.EnrollmentID' class="btn btn-outline-dark" role="button">
                         Edit
                     </a>
                     <button class="btn btn-outline-danger" @onclick="(async () => await Delete(d))">Delete</button>
@@ -40,18 +46,15 @@
 </table>
 
 @code {
-    IEnumerable<BlazorContosoUniversity.Data.Course> data;
+    IEnumerable<BlazorContosoUniversity.Data.Enrollment> data;
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        data = dbContext.Courses.AsNoTracking();
+        data = dbContext.Enrollments.AsNoTracking().Include("Course").Include("Student");
     }
 
-    protected async Task Delete(Data.Course d)
+    protected async Task Delete(Data.Enrollment d)
     {
-        //dbContext.Remove<Data.Course>(await dbContext.Courses.FirstOrDefaultAsync(x => x.CourseID == Id));
-        //dbContext.Remove<Data.Course>(data.FirstOrDefault(x => x.CourseID == Id));
-        //dbContext.Remove<Data.Course>(d);
         dbContext.Remove(d);
         dbContext.SaveChanges();
     }

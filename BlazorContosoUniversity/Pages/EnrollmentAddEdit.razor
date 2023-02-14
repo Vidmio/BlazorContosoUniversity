@@ -1,0 +1,97 @@
+﻿@page "/EnrollmentAddEdit/{Id:int}"
+@using BlazorContosoUniversity.Data
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager NavigationManager
+@inherits BlazorContosoUniversity.Shared.DBContextPage
+<h3>@Title</h3>
+<EditForm Model="@data" OnValidSubmit="Submit">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label>Course</label>
+        <InputSelect class="form-control" @bind-Value="data.CourseID">
+            <option value="">-----Select-----</option>
+            @foreach (var d in SelectCourse)
+            {
+                <option value="@d.CourseID">@d.Title</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="() => data.CourseID" />
+    </div>
+
+    <div class="form-group">
+        <label>Student</label>
+        <InputSelect class="form-control" @bind-Value="data.StudentID">
+            <option value="">-----Select-----</option>
+            @foreach (var d in SelectStudent)
+            {
+                <option value="@d.ID">@d.LastName @d.FirstMidName</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="() => data.StudentID" />
+    </div>
+    <div class="form-group">
+        <label>Grade</label>
+        <InputSelect class="form-control" @bind-Value="data.Grade">
+            <option>A</option>
+            <option>B</option>
+            <option>C</option>
+            <option>D</option>
+            <option>F</option>
+        </InputSelect>
+        <ValidationMessage For="() => data.Grade" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+@code {
+    [Parameter]
+    public int Id { get; set; }
+    protected string Title = "Add";
+    Data.Enrollment data = new Data.Enrollment();
+
+    public List<Data.Course> SelectCourse { get; set; } = new List<Data.Course>();
+    public List<Data.Student> SelectStudent { get; set; } = new List<Data.Student>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        SelectCourse = await Task.Run(() => dbContext.Courses.ToListAsync());
+        SelectStudent = await Task.Run(() => dbContext.Students.ToListAsync());
+        if (Id != 0)
+        {
+            Title = "Edit";
+            data = await Task.Run(() => dbContext.Enrollments.FirstOrDefaultAsync(c => c.EnrollmentID == Id));
+            
+        }
+    }
+    protected async Task Submit()
+    {
+        try
+        {
+            if (Id != 0)
+            {
+                dbContext.Enrollments.Update(data);
+            }
+            else
+            {
+                await dbContext.Enrollments.AddAsync(data);
+
+            }
+            await dbContext.SaveChangesAsync();
+            NavigationManager.NavigateTo("Enrollments");
+        }
+        catch
+        {
+            dbContext.Entry(data).State = EntityState.Detached;
+            throw;
+        }
+
+    }
+    void Cancel()
+    {
+        NavigationManager.NavigateTo("Enrollments");
+
+    }
+}
