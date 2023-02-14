@@ -1,6 +1,6 @@
 # BlazorContosoUniversity  
 Create Blazor Server project: BlazorContosoUniversity  
-Run command in Package Nabager Console(PMC):  
+Run command in Package Manager Console(PMC):  
 Install-Package Microsoft.EntityFrameworkCore  
 Install-Package Microsoft.EntityFrameworkCore.SqlServer  
 Install-Package Microsoft.EntityFrameworkCore.Tools  
