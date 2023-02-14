@@ -1,17 +1,17 @@
-# BlazorContosoUniversity
-Create Blazor Server project: BlazorContosoUniversity
-Run command in Package Nabager Console(PMC):
-Install-Package Microsoft.EntityFrameworkCore
-Install-Package Microsoft.EntityFrameworkCore.SqlServer
-Install-Package Microsoft.EntityFrameworkCore.Tools
-Install-Package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore
+# BlazorContosoUniversity  
+Create Blazor Server project: BlazorContosoUniversity  
+Run command in Package Nabager Console(PMC):  
+Install-Package Microsoft.EntityFrameworkCore  
+Install-Package Microsoft.EntityFrameworkCore.SqlServer  
+Install-Package Microsoft.EntityFrameworkCore.Tools  
+Install-Package Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore  
 
-In data folder add Student.cs
-In data folder add Course.cs
-In data folder add Enrollment.cs
+In data folder add Student.cs  
+In data folder add Course.cs  
+In data folder add Enrollment.cs  
 
-In data folder add ApplicationDbContext.cs
-public class ApplicationDbContext : DbContext
+In data folder add ApplicationDbContext.cs  
+public class ApplicationDbContext : DbContext  
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -33,11 +33,11 @@ builder.Services.AddDbContextFactory<ApplicationDbContext>(options =>
 );
 			
 
-PMC:
-add-migration initial
-update-database
+PMC:  
+add-migration initial  
+update-database  
 
-In shared folder add DBContextPage.razor
+In shared folder add DBContextPage.razor  
 
 @using BlazorContosoUniversity.Data
 @using Microsoft.EntityFrameworkCore
@@ -54,5 +54,5 @@ In shared folder add DBContextPage.razor
     }
 }
 
-In Page folder create pages:
+In Page folder create pages:  
 
